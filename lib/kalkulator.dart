@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Calculator extends StatefulWidget {
+  const Calculator({super.key});
+
   @override
   _CalculatorState createState() => _CalculatorState();
 }
@@ -24,17 +26,17 @@ class _CalculatorState extends State<Calculator> {
         onPressed: () {
           calculation(btntxt);
         },
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          padding: const EdgeInsets.all(20),
+          backgroundColor: btncolor,
+        ),
         child: Text(
           btntxt,
           style: TextStyle(
             fontSize: fontSize,
             color: txtcolor,
           ),
-        ),
-        style: ElevatedButton.styleFrom(
-          shape: CircleBorder(),
-          padding: EdgeInsets.all(20),
-          backgroundColor: btncolor,
         ),
       ),
     );
@@ -45,11 +47,11 @@ class _CalculatorState extends State<Calculator> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Calculator'),
+        title: const Text('Calculator'),
         backgroundColor: Colors.black,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -63,7 +65,7 @@ class _CalculatorState extends State<Calculator> {
                     child: Text(
                       text,
                       textAlign: TextAlign.left,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 100,
                       ),
@@ -81,7 +83,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('/', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -91,7 +93,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('x', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -101,7 +103,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('-', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -111,7 +113,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('+', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -121,7 +123,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('=', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -197,7 +199,7 @@ class _CalculatorState extends State<Calculator> {
     } else if (btnText == '+/-') {
       result.startsWith('-')
           ? result = result.substring(1)
-          : result = '-' + result;
+          : result = '-$result';
       finalResult = result;
     } else {
       if (isEqualPressed) {

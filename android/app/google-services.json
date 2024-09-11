@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "568661363919",
+    "project_id": "kalkulator-8931a",
+    "storage_bucket": "kalkulator-8931a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568661363919:android:3cab5b114ca0df1f50fbba",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzYhSsEoop1P5r6Z4DgDpUccpxDUeUTXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
