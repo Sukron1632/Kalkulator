@@ -1,20 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class BerandaPage extends StatelessWidget {
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal Logout : $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Menghilangkan tombol back di pojok kiri atas
+        automaticallyImplyLeading: false,
         title: const Text('Beranda'),
         backgroundColor: Colors.blue,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/login'); // Navigasi ke halaman login
+              _signOut(context);
             },
-            color: Colors.red, // Tombol logout berwarna merah
+            color: Colors.red,
           ),
         ],
       ),
@@ -23,7 +37,7 @@ class BerandaPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Selamat datang di Beranda!',
+              'Selamat datang di KalkulatorBaiyuh!',
               style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),

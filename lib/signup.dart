@@ -1,36 +1,40 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpState extends State<SignUp> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> _login() async {
+  Future<void> _signup() async {
     String email = usernameController.text;
     String password = passwordController.text;
 
     try{
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       Navigator.pushNamed(context, '/beranda');
     } on FirebaseAuthException catch (e){
-      String message = 'Login Failed';
+      String message = 'Sign up Failed';
 
-      if(e.code == 'user-not-found'){
-        message = 'User not found';
+      if (e.code == 'weak-password'){
+        message = 'Haiya! Password so weak laaa!';
       }
-      else if(e.code == 'wrong-password'){
-        message = 'Wrong password';
+      else if(e.code == 'email-already-in-use'){
+        message = 'Email already in use';
+      }
+      else if(e.code == 'invalid-email'){
+        message = 'Email invalid';
       }
 
       showDialog(context: context, builder: (context) => AlertDialog(
-        title: const Text('Login Failed'),
+        title: const Text('Sign up Failed'),
         content: Text(message),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), 
@@ -114,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginBtn() {
     return ElevatedButton(
       onPressed: () {
-        _login();
+        _signup();
         // // Verifikasi username dan password yang hardcode
         // if (usernameController.text == "admin" && passwordController.text == "123") {
         //   Navigator.pushNamed(context, '/beranda'); // Navigasi ke halaman kalkulator
@@ -128,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
       child: const SizedBox(
         width: double.infinity,
         child: Text(
-          "Log in",
+          "Sign Up",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -143,22 +147,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _extraText() {
-    return TextButton(
-      onPressed: () {Navigator.pushNamed(context, '/signup');},
-      child: const SizedBox(
-        width: double.infinity,
-        child: Text(
-          "Log in",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        primary: Colors.white,
-        onPrimary: Colors.red,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-      ),
+    return const Text(
+      "",
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 16, color: Colors.white),
     );
   }
 }
