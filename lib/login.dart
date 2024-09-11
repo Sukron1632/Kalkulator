@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         // Verifikasi username dan password yang hardcode
         if (usernameController.text == "admin" && passwordController.text == "123") {
-          Navigator.pushNamed(context, '/kalkulator'); // Navigasi ke halaman kalkulator
+          Navigator.pushNamed(context, '/beranda'); // Navigasi ke halaman kalkulator
         } else {
           // Jika login gagal, tampilkan pesan kesalahan
           ScaffoldMessenger.of(context).showSnackBar(
