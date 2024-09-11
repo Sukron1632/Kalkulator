@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         // Verifikasi username dan password yang hardcode
         if (usernameController.text == "admin" && passwordController.text == "123") {
-          Navigator.pushNamed(context, '/beranda'); // Navigasi ke halaman kalkulator
+          Navigator.pushNamed(context, '/beranda'); // Navigasi ke halaman beranda
         } else {
           // Jika login gagal, tampilkan pesan kesalahan
           ScaffoldMessenger.of(context).showSnackBar(
@@ -111,10 +111,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _extraText() {
-    return const Text(
-      "",
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 16, color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/register'); // Navigasi ke halaman register
+      },
+      child: const Text(
+        "Buat akun",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16, color: Colors.white, decoration: TextDecoration.underline),
+      ),
     );
   }
 }
