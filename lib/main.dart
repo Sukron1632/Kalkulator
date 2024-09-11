@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'login.dart'; // Pastikan path sesuai dengan lokasi file login.dart
-import 'beranda.dart'; // Pastikan path sesuai dengan lokasi file beranda.dart
-import 'kalkulator.dart'; // Pastikan path sesuai dengan lokasi file kalkulator.dart
-import 'pengecekan.dart'; // Pastikan path sesuai dengan lokasi file pengecekan.dart
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application/signup.dart';
+import 'firebase_options.dart';
+import 'login.dart';
+import 'beranda.dart';
+import 'kalkulator.dart';
+import 'pengecekan.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -13,12 +19,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login', // Rute awal adalah halaman login
+      initialRoute: '/login',
       routes: {
-        '/login': (context) => LoginPage(), // Halaman login
-        '/beranda': (context) => BerandaPage(), // Halaman beranda setelah login berhasil
-        '/kalkulator': (context) => Calculator(), // Halaman kalkulator setelah beranda
-        '/pengecekan': (context) => PengecekanPage(), // Halaman pengecekan setelah beranda
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => const SignUp(),
+        '/beranda': (context) => BerandaPage(),
+        '/kalkulator': (context) => Calculator(),
+        '/pengecekan': (context) => PengecekanPage(),
       },
     );
   }

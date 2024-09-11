@@ -78,7 +78,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
         }
       },
       style: ElevatedButton.styleFrom(
-        primary: color,
+        backgroundColor: color,
         minimumSize: Size(80, 80), // Ukuran tombol
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8), // Sudut tombol membulat
@@ -170,7 +170,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
               onPressed: _cekGanjilGenap,
               child: Text('Cek Ganjil/Genap'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                backgroundColor: Colors.blue,
                 minimumSize: Size(double.infinity, 60),
               ),
             ),
