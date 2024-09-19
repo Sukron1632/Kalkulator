@@ -24,7 +24,7 @@ class BerandaPage extends StatelessWidget {
         backgroundColor: Colors.blue,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
               _signOut(context);
             },
@@ -48,7 +48,6 @@ class BerandaPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/kalkulator'); // Navigasi ke halaman kalkulator
                 },
-                child: const Text('Buka Kalkulator'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue, // Warna tombol
                   foregroundColor: Colors.white, // Warna teks tombol
@@ -56,6 +55,7 @@ class BerandaPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
                   ),
                 ),
+                child: const Text('Buka Kalkulator'),
               ),
             ),
             const SizedBox(height: 20),
@@ -66,7 +66,6 @@ class BerandaPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/pengecekan'); // Navigasi ke halaman pengecekan
                 },
-                child: const Text('Pengecekan Ganjil Genap'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue, // Warna tombol
                   foregroundColor: Colors.white, // Warna teks tombol
@@ -74,6 +73,7 @@ class BerandaPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
                   ),
                 ),
+                child: const Text('Pengecekan Ganjil Genap'),
               ),
             ),
           ],
