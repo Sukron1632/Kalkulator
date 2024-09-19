@@ -51,6 +51,7 @@ class _CalculatorState extends State<Calculator> {
       appBar: AppBar(
         title: const Text('Kalkulator'),
         backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

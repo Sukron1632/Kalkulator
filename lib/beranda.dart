@@ -22,6 +22,7 @@ class BerandaPage extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text('Beranda'),
         backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -34,10 +35,11 @@ class BerandaPage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center, // Posisi tombol di tengah vertikal
+          crossAxisAlignment: CrossAxisAlignment.center, // Posisi tombol di tengah horizontal
           children: <Widget>[
             const Text(
-              'Selamat datang di KalkulatorBaiyuh!',
+              'Selamat datang di Kalkulator',
               style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
@@ -54,11 +56,12 @@ class BerandaPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
                   ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding yang simetris
                 ),
                 child: const Text('Buka Kalkulator'),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 20), // Jarak antar tombol
             SizedBox(
               width: 200,
               height: 60,
@@ -72,6 +75,7 @@ class BerandaPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
                   ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding yang simetris
                 ),
                 child: const Text('Pengecekan Ganjil Genap'),
               ),
