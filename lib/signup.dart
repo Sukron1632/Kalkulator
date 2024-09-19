@@ -64,10 +64,12 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text("Sign Up", style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
+            const SizedBox(height: 30),
             _icon(),
             const SizedBox(height: 50),
-            _inputField("Username", usernameController),
-            const SizedBox(height: 20),
+            _inputField("Email", usernameController),
+            const SizedBox(height: 10),
             _inputField("Password", passwordController, isPassword: true),
             const SizedBox(height: 30),
             _loginBtn(),
