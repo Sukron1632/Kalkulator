@@ -79,12 +79,12 @@ class _PengecekanPageState extends State<PengecekanPage> {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        minimumSize: Size(80, 80), // Ukuran tombol
+        minimumSize: Size(80, 80), 
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8), // Sudut tombol membulat
+          borderRadius: BorderRadius.circular(8), 
         ),
-        padding: EdgeInsets.all(16), // Padding tombol
-        textStyle: TextStyle(fontSize: fontSize), // Ukuran font
+        padding: EdgeInsets.all(16), 
+        textStyle: TextStyle(fontSize: fontSize), 
       ),
       child: Text(
         text,
@@ -103,7 +103,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke halaman sebelumnya
+            Navigator.pop(context); 
           },
         ),
       ),
@@ -112,7 +112,6 @@ class _PengecekanPageState extends State<PengecekanPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Hasil pengecekan ditampilkan di atas TextField
             Text(
               _result,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -122,7 +121,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
               controller: _controller,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                border: InputBorder.none, // Menghapus border
+                border: InputBorder.none, 
               ),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24),

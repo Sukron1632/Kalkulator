@@ -15,7 +15,7 @@ class _CalculatorState extends State<Calculator> {
   String preOpr = '';
   bool isOperationDone = false;
   bool isEqualPressed = false;
-  double storedResult = 0; // Menyimpan hasil operasi terakhir
+  double storedResult = 0; 
 
   Widget calcButton(String btntxt, Color btncolor, Color txtcolor,
       {double fontSize = 28}) {
@@ -55,7 +55,7 @@ class _CalculatorState extends State<Calculator> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Tombol "back" yang mengarah ke halaman sebelumnya
+            Navigator.pop(context); 
           },
         ),
       ),
@@ -152,7 +152,7 @@ class _CalculatorState extends State<Calculator> {
       preOpr = '';
       isOperationDone = false;
       isEqualPressed = false;
-      storedResult = 0; // Reset hasil tersimpan ketika AC ditekan
+      storedResult = 0; 
     } else if (btnText == '<-') {
       if (result.isNotEmpty) {
         result = result.substring(0, result.length - 1);
@@ -180,7 +180,7 @@ class _CalculatorState extends State<Calculator> {
           finalResult = div();
         }
         numOne = double.parse(finalResult);
-        storedResult = numOne; // Simpan hasil operasi di storedResult
+        storedResult = numOne; 
         result = '';
         isOperationDone = true;
       } else if (opr.isEmpty) {
@@ -192,10 +192,10 @@ class _CalculatorState extends State<Calculator> {
 
       if (btnText == '=') {
         text = finalResult;
-        isEqualPressed = true; // Tandai bahwa = telah ditekan
+        isEqualPressed = true; 
       } else {
         opr = btnText;
-        isEqualPressed = false; // Reset flag saat operator baru ditekan
+        isEqualPressed = false; 
         isOperationDone = false;
       }
     } else if (btnText == '%') {
@@ -213,9 +213,9 @@ class _CalculatorState extends State<Calculator> {
       finalResult = result;
     } else {
       if (isEqualPressed) {
-        // Jika "=" sudah ditekan, mulai dari hasil sebelumnya
+        
         result = btnText;
-        isEqualPressed = false; // Reset flag setelah angka baru dimasukkan
+        isEqualPressed = false; 
       } else {
         result += btnText;
       }
