@@ -14,8 +14,8 @@ class OurTeam extends StatelessWidget {
       ),
       body: const Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Posisikan widget di tengah vertikal
-          crossAxisAlignment: CrossAxisAlignment.center, // Posisikan widget di tengah horizontal
+          mainAxisAlignment: MainAxisAlignment.center, 
+          crossAxisAlignment: CrossAxisAlignment.center, 
           children: <Widget>[
             SizedBox(height: 20),
             SizedBox(
@@ -27,13 +27,12 @@ class OurTeam extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      backgroundColor: Colors.blueGrey,
-                      child: FlutterLogo(size: 40),
+                      backgroundImage: AssetImage('assets/images/bayu.jpeg'),
                     ),
-                    SizedBox(width: 15), // Jarak antara avatar dan teks
+                    SizedBox(width: 15),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center, // Posisikan teks di tengah vertikal
-                      crossAxisAlignment: CrossAxisAlignment.start, // Teks rata kiri
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start, 
                       children: [
                         Text(
                           "Ammar Bayu Saputra",
@@ -56,7 +55,7 @@ class OurTeam extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20), // Jarak antar elemen
+            SizedBox(height: 20),
             SizedBox(
               width: 300,
               height: 100,
@@ -66,13 +65,12 @@ class OurTeam extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      backgroundColor: Colors.blueGrey,
-                      child: FlutterLogo(size: 40),
+                      backgroundImage: AssetImage('assets/images/zola.jpeg'),
                     ),
-                    SizedBox(width: 15), // Jarak antara avatar dan teks
+                    SizedBox(width: 15),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center, // Posisikan teks di tengah vertikal
-                      crossAxisAlignment: CrossAxisAlignment.start, // Teks rata kiri
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Zola Dimas Firmansyah",

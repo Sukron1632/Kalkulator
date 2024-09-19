@@ -68,6 +68,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text("Log In", style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
+            const SizedBox(height: 30),
             icon(),
             const SizedBox(height: 50),
             inputtext("Email", usernameController),
