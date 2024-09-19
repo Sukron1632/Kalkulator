@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_application/ourteam.dart';
-import 'package:flutter_application/signup.dart';
+import 'ourteam.dart';
+import 'signup.dart';
 import 'firebase_options.dart';
 import 'login.dart';
 import 'beranda.dart';
