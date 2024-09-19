@@ -46,9 +46,12 @@ class _PengecekanPageState extends State<PengecekanPage> {
   }
 
   void _addNumber(String number) {
-    setState(() {
-      _controller.text += number;
-    });
+    // Batasi panjang input menjadi 15 digit
+    if (_controller.text.length < 15) {
+      setState(() {
+        _controller.text += number;
+      });
+    }
   }
 
   void _clear() {
@@ -79,12 +82,12 @@ class _PengecekanPageState extends State<PengecekanPage> {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        minimumSize: Size(80, 80), 
+        minimumSize: Size(80, 80),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8), 
+          borderRadius: BorderRadius.circular(8),
         ),
-        padding: EdgeInsets.all(16), 
-        textStyle: TextStyle(fontSize: fontSize), 
+        padding: EdgeInsets.all(16),
+        textStyle: TextStyle(fontSize: fontSize),
       ),
       child: Text(
         text,
@@ -103,7 +106,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
         ),
       ),
@@ -121,7 +124,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
               controller: _controller,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                border: InputBorder.none, 
+                border: InputBorder.none,
               ),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24),

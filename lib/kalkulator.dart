@@ -15,7 +15,7 @@ class _CalculatorState extends State<Calculator> {
   String preOpr = '';
   bool isOperationDone = false;
   bool isEqualPressed = false;
-  double storedResult = 0; 
+  double storedResult = 0;
 
   Widget calcButton(String btntxt, Color btncolor, Color txtcolor,
       {double fontSize = 28}) {
@@ -55,7 +55,7 @@ class _CalculatorState extends State<Calculator> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
         ),
       ),
@@ -76,7 +76,7 @@ class _CalculatorState extends State<Calculator> {
                       textAlign: TextAlign.right,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 100,
+                        fontSize: 40,
                       ),
                     ),
                   ),
@@ -152,7 +152,7 @@ class _CalculatorState extends State<Calculator> {
       preOpr = '';
       isOperationDone = false;
       isEqualPressed = false;
-      storedResult = 0; 
+      storedResult = 0;
     } else if (btnText == '<-') {
       if (result.isNotEmpty) {
         result = result.substring(0, result.length - 1);
@@ -180,7 +180,7 @@ class _CalculatorState extends State<Calculator> {
           finalResult = div();
         }
         numOne = double.parse(finalResult);
-        storedResult = numOne; 
+        storedResult = numOne;
         result = '';
         isOperationDone = true;
       } else if (opr.isEmpty) {
@@ -192,10 +192,10 @@ class _CalculatorState extends State<Calculator> {
 
       if (btnText == '=') {
         text = finalResult;
-        isEqualPressed = true; 
+        isEqualPressed = true;
       } else {
         opr = btnText;
-        isEqualPressed = false; 
+        isEqualPressed = false;
         isOperationDone = false;
       }
     } else if (btnText == '%') {
@@ -213,11 +213,13 @@ class _CalculatorState extends State<Calculator> {
       finalResult = result;
     } else {
       if (isEqualPressed) {
-        
         result = btnText;
-        isEqualPressed = false; 
+        isEqualPressed = false;
       } else {
-        result += btnText;
+        // Batasi panjang input menjadi 15 digit
+        if (result.length < 15) {
+          result += btnText;
+        }
       }
       finalResult = result;
     }

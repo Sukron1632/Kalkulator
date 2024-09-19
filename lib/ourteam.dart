@@ -12,9 +12,9 @@ class OurTeam extends StatelessWidget {
         elevation: 1,
         shadowColor: Colors.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // Ikon anak panah
+          icon: const Icon(Icons.arrow_back), 
           onPressed: () {
-            Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+            Navigator.of(context).pop(); 
           },
         ),
       ),
@@ -33,7 +33,7 @@ class OurTeam extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      backgroundImage: AssetImage('images/bayu.jpeg'), // Menggunakan backgroundImage
+                      backgroundImage: AssetImage('assets/images/bayu.jpeg'), 
                     ),
                     SizedBox(width: 15),
                     Column(
@@ -71,7 +71,7 @@ class OurTeam extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      backgroundImage: AssetImage('images/zola.jpg'), // Menggunakan backgroundImage
+                      backgroundImage: AssetImage('assets/images/zola.jpeg'), 
                     ),
                     SizedBox(width: 15),
                     Column(
