@@ -28,15 +28,23 @@ class _LoginPageState extends State<LoginPage> {
       else if(e.code == 'wrong-password'){
         message = 'Wrong password';
       }
-
-      showDialog(context: context, builder: (context) => AlertDialog(
-        title: const Text('Login Failed'),
-        content: Text(message),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), 
-          child: const Text('OK'),),
-        ],
-      ));
+      SnackBar snackBar = SnackBar(
+        content: Text(
+        message, 
+        style: const TextStyle(
+            color: Colors.white
+          ),
+        ), 
+        backgroundColor: Colors.red);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // showDialog(context: context, builder: (context) => AlertDialog(
+      //   title: const Text('Login Failed'),
+      //   content: Text(message),
+      //   actions: [
+      //     TextButton(onPressed: () => Navigator.pop(context), 
+      //     child: const Text('OK'),),
+      //   ],
+      // ));
     }
   }
 
