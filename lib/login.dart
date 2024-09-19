@@ -68,28 +68,28 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _icon(),
+            icon(),
             const SizedBox(height: 50),
-            _inputField("Email", usernameController),
+            inputtext("Email", usernameController),
             const SizedBox(height: 10),
-            _inputField("Password", passwordController, isPassword: true),
+            inputtext("Password", passwordController, isPassword: true),
             const SizedBox(height: 30),
-            _loginBtn(),
+            loginBtn(),
             const SizedBox(height: 5),
-            _extraText(),
+            signUpBtn(),
           ],
         ),
       ),
     );
   }
 
-  Widget _icon() {
+  Widget icon() {
     return Container(
       child: const Icon(Icons.calculate, color: Colors.black54, size: 120),
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller, {bool isPassword = false}) {
+  Widget inputtext(String hintText, TextEditingController controller, {bool isPassword = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
       borderSide: const BorderSide(color: Colors.black54),
@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _loginBtn() {
+  Widget loginBtn() {
     return ElevatedButton(
       onPressed: () {
         _login();
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _extraText() {
+  Widget signUpBtn() {
     return TextButton(
       onPressed: () {Navigator.pushNamed(context, '/signup');},
       style: ElevatedButton.styleFrom(
