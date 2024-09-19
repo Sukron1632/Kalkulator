@@ -21,11 +21,13 @@ class BerandaPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Beranda'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 1,
+        shadowColor: Colors.black,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
               _signOut(context);
             },
@@ -50,15 +52,15 @@ class BerandaPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/kalkulator'); // Navigasi ke halaman kalkulator
                 },
-                child: const Text('Buka Kalkulator', style: TextStyle(fontSize: 16)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Warna tombol
+                  backgroundColor: Colors.black, // Warna tombol
                   foregroundColor: Colors.white, // Warna teks tombol
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding yang simetris
                 ),
+                child: const Text('Buka Kalkulator'),
               ),
             ),
             const SizedBox(height: 20), // Jarak antar tombol
@@ -69,15 +71,34 @@ class BerandaPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/pengecekan'); // Navigasi ke halaman pengecekan
                 },
-                child: const Text('Pengecekan Ganjil Genap', style: TextStyle(fontSize: 16)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Warna tombol
+                  backgroundColor: Colors.black, // Warna tombol
                   foregroundColor: Colors.white, // Warna teks tombol
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding yang simetris
                 ),
+                child: const Text('Pengecekan Ganjil Genap', textAlign: TextAlign.center,),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 200,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/ourteam'); // Navigasi ke halaman pengecekan
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black, // Warna tombol
+                  foregroundColor: Colors.white, // Warna teks tombol
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // Membuat tombol lebih simetris
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Padding yang simetris
+                ),
+                child: const Text('Kelompok', textAlign: TextAlign.center,),
               ),
             ),
           ],

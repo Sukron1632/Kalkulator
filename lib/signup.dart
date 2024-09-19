@@ -48,14 +48,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.brown,
-            Colors.blueAccent,
-          ],
-        ),
+        color: Colors.white
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -76,10 +69,10 @@ class _SignUpState extends State<SignUp> {
             _inputField("Username", usernameController),
             const SizedBox(height: 20),
             _inputField("Password", passwordController, isPassword: true),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             _loginBtn(),
-            const SizedBox(height: 20),
-            _extraText(),
+            const SizedBox(height: 5),
+            login(),
           ],
         ),
       ),
@@ -88,26 +81,22 @@ class _SignUpState extends State<SignUp> {
 
   Widget _icon() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2),
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(Icons.person, color: Colors.white, size: 120),
+      child: const Icon(Icons.calculate, color: Colors.black54, size: 120),
     );
   }
 
   Widget _inputField(String hintText, TextEditingController controller, {bool isPassword = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(color: Colors.white),
+      borderSide: const BorderSide(color: Colors.black54),
     );
 
     return TextField(
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.black87),
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: border,
         focusedBorder: border,
       ),
@@ -129,6 +118,12 @@ class _SignUpState extends State<SignUp> {
         //   );
         // }
       },
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        backgroundColor: Colors.black54,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
       child: const SizedBox(
         width: double.infinity,
         child: Text(
@@ -137,20 +132,17 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.blue,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-      ),
     );
   }
 
-  Widget _extraText() {
-    return const Text(
-      "",
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 16, color: Colors.white),
+  Widget login() {
+    return TextButton(
+      onPressed: () {Navigator.pushNamed(context, '/login');},
+      child: const Text(
+        "Already have account?",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 15, color: Colors.black54),
+      ),
     );
   }
 }

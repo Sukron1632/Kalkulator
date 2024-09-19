@@ -98,8 +98,8 @@ class _PengecekanPageState extends State<PengecekanPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Pengecekan Ganjil Genap'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

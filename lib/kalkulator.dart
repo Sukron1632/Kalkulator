@@ -19,26 +19,26 @@ class _CalculatorState extends State<Calculator> {
 
   Widget calcButton(String btntxt, Color btncolor, Color txtcolor,
       {double fontSize = 28}) {
-    return Container(
+    return SizedBox(
       width: 80,
       height: 80,
       child: ElevatedButton(
         onPressed: () {
           calculation(btntxt);
         },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(16),
+          backgroundColor: btncolor,
+        ),
         child: Text(
           btntxt,
           style: TextStyle(
             fontSize: fontSize,
             color: txtcolor,
           ),
-        ),
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          padding: EdgeInsets.all(16),
-          backgroundColor: btncolor,
         ),
       ),
     );
@@ -49,18 +49,18 @@ class _CalculatorState extends State<Calculator> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Kalkulator'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        title: const Text('Kalkulator'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Tombol "back" yang mengarah ke halaman sebelumnya
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -74,7 +74,7 @@ class _CalculatorState extends State<Calculator> {
                     child: Text(
                       text,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 100,
                       ),
@@ -83,7 +83,7 @@ class _CalculatorState extends State<Calculator> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -93,7 +93,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('/', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -103,7 +103,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('x', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -113,7 +113,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('-', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -123,7 +123,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('+', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -133,7 +133,7 @@ class _CalculatorState extends State<Calculator> {
                 calcButton('=', Colors.amber[700]!, Colors.white),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ),

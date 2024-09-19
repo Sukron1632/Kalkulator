@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application/ourteam.dart';
 import 'package:flutter_application/signup.dart';
 import 'firebase_options.dart';
 import 'login.dart';
@@ -8,6 +9,7 @@ import 'kalkulator.dart';
 import 'pengecekan.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/beranda': (context) => BerandaPage(),
         '/kalkulator': (context) => Calculator(),
         '/pengecekan': (context) => PengecekanPage(),
+        '/ourteam': (context) => OurTeam(),
       },
     );
   }

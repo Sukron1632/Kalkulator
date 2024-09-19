@@ -28,15 +28,23 @@ class _LoginPageState extends State<LoginPage> {
       else if(e.code == 'wrong-password'){
         message = 'Wrong password';
       }
-
-      showDialog(context: context, builder: (context) => AlertDialog(
-        title: const Text('Login Failed'),
-        content: Text(message),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), 
-          child: const Text('OK'),),
-        ],
-      ));
+      SnackBar snackBar = SnackBar(
+        content: Text(
+        message, 
+        style: const TextStyle(
+            color: Colors.white
+          ),
+        ), 
+        backgroundColor: Colors.red);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // showDialog(context: context, builder: (context) => AlertDialog(
+      //   title: const Text('Login Failed'),
+      //   content: Text(message),
+      //   actions: [
+      //     TextButton(onPressed: () => Navigator.pop(context), 
+      //     child: const Text('OK'),),
+      //   ],
+      // ));
     }
   }
 
@@ -44,14 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.brown,
-            Colors.blueAccent,
-          ],
-        ),
+        color: Colors.white
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -67,43 +68,39 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _icon(),
+            icon(),
             const SizedBox(height: 50),
-            _inputField("Email", usernameController),
-            const SizedBox(height: 20),
-            _inputField("Password", passwordController, isPassword: true),
-            const SizedBox(height: 50),
-            _loginBtn(),
-            const SizedBox(height: 20),
-            _extraText(),
+            inputtext("Email", usernameController),
+            const SizedBox(height: 10),
+            inputtext("Password", passwordController, isPassword: true),
+            const SizedBox(height: 30),
+            loginBtn(),
+            const SizedBox(height: 5),
+            signUpBtn(),
           ],
         ),
       ),
     );
   }
 
-  Widget _icon() {
+  Widget icon() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2),
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(Icons.person, color: Colors.white, size: 120),
+      child: const Icon(Icons.calculate, color: Colors.black54, size: 120),
     );
   }
 
-  Widget _inputField(String hintText, TextEditingController controller, {bool isPassword = false}) {
+  Widget inputtext(String hintText, TextEditingController controller, {bool isPassword = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
-      borderSide: const BorderSide(color: Colors.white),
+      borderSide: const BorderSide(color: Colors.black54),
     );
 
     return TextField(
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.black87),
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.grey),
         enabledBorder: border,
         focusedBorder: border,
       ),
@@ -111,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _loginBtn() {
+  Widget loginBtn() {
     return ElevatedButton(
       onPressed: () {
         _login();
@@ -125,6 +122,12 @@ class _LoginPageState extends State<LoginPage> {
         //   );
         // }
       },
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        backgroundColor: Colors.black87,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
       child: const SizedBox(
         width: double.infinity,
         child: Text(
@@ -133,31 +136,24 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.blue,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-      ),
     );
   }
 
-  Widget _extraText() {
+  Widget signUpBtn() {
     return TextButton(
       onPressed: () {Navigator.pushNamed(context, '/signup');},
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        foregroundColor: Colors.black54,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
       child: const SizedBox(
         width: double.infinity,
         child: Text(
-          "Sign UP",
+          "Create account",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 15),
         ),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.red,
-        padding: const EdgeInsets.symmetric(vertical: 16),
       ),
     );
   }
