@@ -1,19 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Stopwatch',
-      debugShowCheckedModeBanner: false,
-      home: StopWatchPage(),
-    );
-  }
-}
-
 class StopWatchPage extends StatefulWidget {
   @override
   _StopWatchPageState createState() => _StopWatchPageState();
@@ -97,15 +84,15 @@ class _StopWatchPageState extends State<StopWatchPage> {
       children: [
         buildTimeCard(time: hours, header: 'JAM'),
         const SizedBox(width: 8),
-        const Text(':', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+        const Text(':', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         const SizedBox(width: 8),
         buildTimeCard(time: minutes, header: 'MENIT'),
         const SizedBox(width: 8),
-        const Text(':', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+        const Text(':', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         const SizedBox(width: 8),
         buildTimeCard(time: seconds, header: 'DETIK'),
         const SizedBox(width: 8),
-        const Text(':', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+        const Text(':', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         const SizedBox(width: 8),
         buildTimeCard(time: twoDigits(milliseconds), header: 'MILI DETIK'),
       ],
