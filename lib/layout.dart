@@ -1,7 +1,7 @@
+import 'package:AppaAja/Pages/beranda.dart';
+import 'package:AppaAja/Pages/help.dart';
+import 'package:AppaAja/Pages/math.dart';
 import 'package:flutter/material.dart';
-import 'package:kalkulator_yak/Pages/beranda.dart';
-import 'package:kalkulator_yak/Pages/help.dart';
-import 'package:kalkulator_yak/Pages/math.dart';
 
 
 class MainPage extends StatefulWidget {

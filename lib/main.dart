@@ -1,10 +1,8 @@
+import 'package:AppaAja/Components/recSite.dart';
+import 'package:AppaAja/Components/stopwacth.dart';
+import 'package:AppaAja/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kalkulator_yak/Components/recSite.dart';
-import 'package:kalkulator_yak/Pages/help.dart';
-import 'package:kalkulator_yak/layout.dart';
-import 'package:kalkulator_yak/Pages/math.dart';
-import 'package:kalkulator_yak/Components/stopwacth.dart';
 import 'Components/ourteam.dart';
 import 'signup.dart';
 import 'firebase_options.dart';
