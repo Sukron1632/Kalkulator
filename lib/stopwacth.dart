@@ -133,7 +133,7 @@ class _StopWatchPageState extends State<StopWatchPage> {
         if (isRunning) ...[
           ElevatedButton(
             onPressed: stopTimer,
-            child: Text('Stop'),
+            child: Text('Pause'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
