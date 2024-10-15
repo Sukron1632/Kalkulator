@@ -101,6 +101,25 @@ class BerandaPage extends StatelessWidget {
                 child: const Text('Pengecekan Ganjil Genap', textAlign: TextAlign.center),
               ),
             ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 200,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/stopwacth'); 
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                ),
+                child: const Text('stopwacth'),
+              ),
+            ),
           ],
         ),
       ),

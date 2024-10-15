@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kalkulator_yak/stopwacth.dart';
 import 'ourteam.dart';
 import 'signup.dart';
 import 'firebase_options.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/kalkulator': (context) => Calculator(),
         '/pengecekan': (context) => PengecekanPage(),
         '/ourteam': (context) => OurTeam(),
+        '/stopwacth': (context) => StopWatchPage(),
       },
     );
   }

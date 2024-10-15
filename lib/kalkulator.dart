@@ -142,7 +142,6 @@ class _CalculatorState extends State<Calculator> {
 
   void calculation(String btnText) {
     if (btnText == 'AC') {
-      // Reset kalkulator
       text = '0';
       numOne = 0;
       numTwo = 0;
