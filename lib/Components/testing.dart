@@ -1,6 +1,8 @@
-import 'package:AppaAja/Services/sites_service.dart';
+import 'package:AppaAja/Services/service_testing.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class TestingPage extends StatefulWidget {
   @override
@@ -12,13 +14,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
   final FirestoreService _firestoreService = FirestoreService();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _linkController = TextEditingController();
-
-  Future<void> _launchUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $urlString');
-    }
-  }
+  File? _imageFile;
 
   @override
   void initState() {
@@ -34,17 +30,59 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
 
   Future<void> _addPost() async {
     if (_titleController.text.isNotEmpty && _linkController.text.isNotEmpty) {
+      String? imageUrl;
+
+      if (_imageFile != null) {
+
+        final loadingDialog = showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return const AlertDialog(
+              content: Row(
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 20),
+                  Text("Adding..."),
+                ],
+              ),
+            );
+          },
+        );
+
+        imageUrl = await _uploadImage(_imageFile!);
+        Navigator.of(context).pop();
+      }
+
       await _firestoreService.addPost(
         _titleController.text,
         _linkController.text,
         false,
+        imageUrl,
       );
+
       _titleController.clear();
       _linkController.clear();
+      setState(() {
+        _imageFile = null;
+      });
       Navigator.of(context).pop();
     }
   }
 
+  Future<String?> _uploadImage(File imageFile) async {
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = FirebaseStorage.instance.ref().child('web_logos/$fileName');
+      await ref.putFile(imageFile);
+      String downloadUrl = await ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Function to open the "Add Website" dialog
   void _openAddWebsiteDialog() {
     showDialog(
       context: context,
@@ -62,18 +100,56 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                 controller: _linkController,
                 decoration: const InputDecoration(labelText: 'Website Link'),
               ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _pickImage,
+                style: ElevatedButton.styleFrom(
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7)
+                  ),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white
+                ),
+                child: const Text('Upload Image'),
+              ),
+              if (_imageFile != null) ...[
+                const SizedBox(height: 8),
+                Image.file(
+                  _imageFile!,
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+              ],
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: _addPost,
-              child: const Text('Add Website'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black
+                  ),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: _addPost,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7)
+                    ),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white
+                  ),
+                  child: const Text('Add Website'),
+                ),
+              ],
             ),
           ],
         );
@@ -81,6 +157,19 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
     );
   }
 
+  // Function to pick an image from the gallery
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  // Function to toggle favorite status
   Future<void> _toggleFavorite(Post post) async {
     await _firestoreService.updatePost(post.id, !post.fav);
   }
@@ -104,35 +193,30 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: _openAddWebsiteDialog,
+            onPressed: _openAddWebsiteDialog, // Open the popup when pressed
           ),
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.black,
-          labelColor: const Color.fromARGB(255, 134, 43, 15),
-          unselectedLabelColor: Colors.grey,
           tabs: const [
-            Tab(
-              icon: Icon(Icons.language),
-            ),
-            Tab(
-              icon: Icon(Icons.favorite),
-            ),
+            Tab(text: 'All Websites'),
+            Tab(text: 'Favorites'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          _tabAll(),
-          _tabWebFavorit(),
+          // First tab: Displaying all websites
+          _buildAllWebsitesTab(),
+          // Second tab: Displaying favorite websites
+          _buildFavoriteWebsitesTab(),
         ],
       ),
     );
   }
 
-  Widget _tabAll() {
+  Widget _buildAllWebsitesTab() {
     return StreamBuilder<List<Post>>(
       stream: _firestoreService.getPosts(),
       builder: (context, snapshot) {
@@ -141,26 +225,27 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
         }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching posts'));
+          return const Center(child: Text('Error fetching websites'));
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No posts found'));
+          return const Center(child: Text('No websites found'));
         }
 
+        // List of all posts
         final posts = snapshot.data!;
         return ListView.builder(
           itemCount: posts.length,
           itemBuilder: (context, index) {
             final post = posts[index];
-            return _websiteList(post);
+            return _buildPostCard(post);
           },
         );
       },
     );
   }
 
-  Widget _tabWebFavorit() {
+  Widget _buildFavoriteWebsitesTab() {
     return StreamBuilder<List<Post>>(
       stream: _firestoreService.getPosts(),
       builder: (context, snapshot) {
@@ -169,30 +254,31 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
         }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching posts'));
+          return const Center(child: Text('Error fetching websites'));
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No favorite posts found'));
+          return const Center(child: Text('No favorite websites found'));
         }
 
+        // List of favorite posts
         final posts = snapshot.data!.where((post) => post.fav).toList();
         if (posts.isEmpty) {
-          return const Center(child: Text('No favorite posts found'));
+          return const Center(child: Text('No favorite websites found'));
         }
 
         return ListView.builder(
           itemCount: posts.length,
           itemBuilder: (context, index) {
             final post = posts[index];
-            return _websiteList(post);
+            return _buildPostCard(post);
           },
         );
       },
     );
   }
 
-  Widget _websiteList(Post post) {
+  Widget _buildPostCard(Post post) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ElevatedButton(
@@ -202,19 +288,32 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          elevation: 2,
+          elevation: 1,
         ),
         onPressed: () {
-          _launchUrl(post.link);
+          // _launchUrl(post.link);
         },
         child: SizedBox(
           width: double.infinity,
-          height: 100,
+          height: 70,
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 35,
-                backgroundImage: AssetImage('assets/images/upn.png'),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(7),
+                child: Image.network(
+                  post.imageUrl ?? 'assets/images/appaaja.png',
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/appaaja.png',
+                      height: 70,
+                      width: 70,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
               ),
               const SizedBox(width: 15),
               Column(
@@ -224,7 +323,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                   Text(
                     post.title,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -233,7 +332,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                   Text(
                     post.link,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 10,
                       color: Colors.grey,
                     ),
                   ),
@@ -243,7 +342,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
               IconButton(
                 icon: Icon(
                   post.fav ? Icons.favorite : Icons.favorite_border,
-                  color: post.fav ? Colors.red : Colors.black,
+                  color: post.fav ? Colors.red : null,
                 ),
                 onPressed: () {
                   _toggleFavorite(post);

@@ -1,6 +1,9 @@
 import 'package:AppaAja/Services/sites_service.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class websitePage extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
   final FirestoreService _firestoreService = FirestoreService();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _linkController = TextEditingController();
+  File? _imageFile;
 
   Future<void> _launchUrl(String urlString) async {
     final Uri url = Uri.parse(urlString);
@@ -34,14 +38,66 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
 
   Future<void> _addPost() async {
     if (_titleController.text.isNotEmpty && _linkController.text.isNotEmpty) {
+      String? imageUrl;
+
+      if (_imageFile != null) {
+
+        final loadingDialog = showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return const AlertDialog(
+              content: Row(
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 20),
+                  Text("Adding..."),
+                ],
+              ),
+            );
+          },
+        );
+
+        imageUrl = await _uploadImage(_imageFile!);
+        Navigator.of(context).pop();
+      }
+
       await _firestoreService.addPost(
         _titleController.text,
         _linkController.text,
         false,
+        imageUrl,
       );
+
       _titleController.clear();
       _linkController.clear();
+      setState(() {
+        _imageFile = null;
+      });
       Navigator.of(context).pop();
+    }
+  }
+
+  Future<String?> _uploadImage(File imageFile) async {
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = FirebaseStorage.instance.ref().child('web_logos/$fileName');
+      await ref.putFile(imageFile);
+      String downloadUrl = await ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
     }
   }
 
@@ -62,18 +118,56 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                 controller: _linkController,
                 decoration: const InputDecoration(labelText: 'Website Link'),
               ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _pickImage,
+                style: ElevatedButton.styleFrom(
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7)
+                  ),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white
+                ),
+                child: const Text('Upload Image'),
+              ),
+              if (_imageFile != null) ...[
+                const SizedBox(height: 8),
+                Image.file(
+                  _imageFile!,
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+              ],
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: _addPost,
-              child: const Text('Add Website'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black
+                  ),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: _addPost,
+                  style: ElevatedButton.styleFrom(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7)
+                    ),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white
+                  ),
+                  child: const Text('Add Website'),
+                ),
+              ],
             ),
           ],
         );
@@ -141,11 +235,11 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
         }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching posts'));
+          return const Center(child: Text('Error fetching websites'));
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No posts found'));
+          return const Center(child: Text('No websites found'));
         }
 
         final posts = snapshot.data!;
@@ -169,16 +263,16 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
         }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching posts'));
+          return const Center(child: Text('Error fetching websites'));
         }
 
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No favorite posts found'));
+          return const Center(child: Text('No favorite websites found'));
         }
 
         final posts = snapshot.data!.where((post) => post.fav).toList();
         if (posts.isEmpty) {
-          return const Center(child: Text('No favorite posts found'));
+          return const Center(child: Text('No favorite websites found'));
         }
 
         return ListView.builder(
@@ -202,19 +296,32 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          elevation: 2,
+          elevation: 1,
         ),
         onPressed: () {
           _launchUrl(post.link);
         },
         child: SizedBox(
           width: double.infinity,
-          height: 100,
+          height: 70,
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 35,
-                backgroundImage: AssetImage('assets/images/upn.png'),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(7),
+                child: Image.network(
+                  post.imageUrl ?? 'assets/images/appaaja.png',
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/appaaja.png',
+                      height: 70,
+                      width: 70,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
               ),
               const SizedBox(width: 15),
               Column(
@@ -224,7 +331,7 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                   Text(
                     post.title,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -233,7 +340,7 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                   Text(
                     post.link,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 10,
                       color: Colors.grey,
                     ),
                   ),
