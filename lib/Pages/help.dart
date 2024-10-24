@@ -19,9 +19,6 @@ class HelpPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Help'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
         shadowColor: Colors.black,
       ),
       body: Padding(

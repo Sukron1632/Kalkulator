@@ -8,9 +8,6 @@ class MathPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Math'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
         shadowColor: Colors.black,
       ),
       body: Center(

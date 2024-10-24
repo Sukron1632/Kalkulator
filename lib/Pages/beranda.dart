@@ -8,9 +8,6 @@ class BerandaPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Beranda'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
         shadowColor: Colors.black,
       ),
       body: Center(
@@ -66,7 +63,7 @@ class BerandaPage extends StatelessWidget {
               height: 60,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/post');
+                  Navigator.pushNamed(context, '/testing');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
@@ -77,7 +74,7 @@ class BerandaPage extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
-                child: const Text('Post Page'),
+                child: const Text('testing Page'),
               ),
             ),
             const SizedBox(height: 20),
@@ -86,7 +83,7 @@ class BerandaPage extends StatelessWidget {
               height: 60,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/recsite');
+                  Navigator.pushNamed(context, '/website');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

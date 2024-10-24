@@ -19,7 +19,7 @@ class _SignUpState extends State<SignUp> {
 
     try{
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      Navigator.pushNamed(context, '/beranda');
+      Navigator.pushNamed(context, '/layout');
     } on FirebaseAuthException catch (e){
       String message = 'Sign up Failed';
 
@@ -82,8 +82,14 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget _icon() {
-    return Container(
-      child: const Icon(Icons.calculate, color: Colors.black54, size: 120),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Image.asset(
+        'assets/images/appaaja.png',
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,
+      ),
     );
   }
 

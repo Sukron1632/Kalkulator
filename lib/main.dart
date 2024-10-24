@@ -1,6 +1,7 @@
 import 'package:AppaAja/Components/recSite.dart';
 import 'package:AppaAja/Components/stopwacth.dart';
-import 'package:AppaAja/Components/store_post.dart';
+import 'package:AppaAja/Components/testing.dart';
+import 'package:AppaAja/Components/website_page.dart';
 import 'package:AppaAja/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +9,6 @@ import 'Components/ourteam.dart';
 import 'signup.dart';
 import 'firebase_options.dart';
 import 'login.dart';
-import 'Pages/beranda.dart';
 import 'Components/kalkulator.dart';
 import 'Components/pengecekan.dart';
 
@@ -25,6 +25,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0.5,
+          shadowColor: Colors.black
+        )
+      ),
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginPage(),
@@ -35,7 +43,8 @@ class MyApp extends StatelessWidget {
         '/stopwacth': (context) => StopWatchPage(),
         '/recsite': (context) => const RecSite(),
         '/layout':(context) => MainPage(),
-        '/post':(context) => PostPage(),
+        '/website':(context) => websitePage(),
+        '/testing':(context) => TestingPage(),
       },
     );
   }
