@@ -1,5 +1,6 @@
 import 'package:AppaAja/Components/recSite.dart';
 import 'package:AppaAja/Components/stopwacth.dart';
+import 'package:AppaAja/Components/store_post.dart';
 import 'package:AppaAja/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,8 +21,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +34,8 @@ class MyApp extends StatelessWidget {
         '/ourteam': (context) => OurTeam(),
         '/stopwacth': (context) => StopWatchPage(),
         '/recsite': (context) => const RecSite(),
-        '/layout':(context) => MainPage()
+        '/layout':(context) => MainPage(),
+        '/post':(context) => PostPage(),
       },
     );
   }

@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA5cIk-e2XKskcry2-qlNr28LElZYJnk_Q',
-    appId: '1:568661363919:web:5d7f2ed660ab8c9b50fbba',
-    messagingSenderId: '568661363919',
-    projectId: 'kalkulator-8931a',
-    authDomain: 'kalkulator-8931a.firebaseapp.com',
-    storageBucket: 'kalkulator-8931a.appspot.com',
-    measurementId: 'G-L2F8PSR2MT',
+    apiKey: 'AIzaSyBc0cioNBzUlBHXYTce4CuiTtMbrPv44Fs',
+    appId: '1:431017052825:web:15351121cee5457c7b0608',
+    messagingSenderId: '431017052825',
+    projectId: 'appaaja-bd44e',
+    authDomain: 'appaaja-bd44e.firebaseapp.com',
+    storageBucket: 'appaaja-bd44e.appspot.com',
+    measurementId: 'G-H287JPDJQ2',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDzYhSsEoop1P5r6Z4DgDpUccpxDUeUTXE',
-    appId: '1:568661363919:android:3cab5b114ca0df1f50fbba',
-    messagingSenderId: '568661363919',
-    projectId: 'kalkulator-8931a',
-    storageBucket: 'kalkulator-8931a.appspot.com',
+    apiKey: 'AIzaSyAtS0g_F5jQ9U9kiRgej2O0N9NIvAVRuTA',
+    appId: '1:431017052825:android:724f895631edf5557b0608',
+    messagingSenderId: '431017052825',
+    projectId: 'appaaja-bd44e',
+    storageBucket: 'appaaja-bd44e.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCsAnNULA9YBgZ2iLbixGNkOVawqEjH1Z4',
-    appId: '1:568661363919:ios:186c2e03335924c450fbba',
-    messagingSenderId: '568661363919',
-    projectId: 'kalkulator-8931a',
-    storageBucket: 'kalkulator-8931a.appspot.com',
+    apiKey: 'AIzaSyAIx-zs0pnu2AIU1a-yin3gcXyJHHzvjYI',
+    appId: '1:431017052825:ios:a0b4ff48c1c4a9cd7b0608',
+    messagingSenderId: '431017052825',
+    projectId: 'appaaja-bd44e',
+    storageBucket: 'appaaja-bd44e.appspot.com',
     iosBundleId: 'com.example.flutterApplication',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCsAnNULA9YBgZ2iLbixGNkOVawqEjH1Z4',
-    appId: '1:568661363919:ios:186c2e03335924c450fbba',
-    messagingSenderId: '568661363919',
-    projectId: 'kalkulator-8931a',
-    storageBucket: 'kalkulator-8931a.appspot.com',
+    apiKey: 'AIzaSyAIx-zs0pnu2AIU1a-yin3gcXyJHHzvjYI',
+    appId: '1:431017052825:ios:a0b4ff48c1c4a9cd7b0608',
+    messagingSenderId: '431017052825',
+    projectId: 'appaaja-bd44e',
+    storageBucket: 'appaaja-bd44e.appspot.com',
     iosBundleId: 'com.example.flutterApplication',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA5cIk-e2XKskcry2-qlNr28LElZYJnk_Q',
-    appId: '1:568661363919:web:dbcd3160c468df4550fbba',
-    messagingSenderId: '568661363919',
-    projectId: 'kalkulator-8931a',
-    authDomain: 'kalkulator-8931a.firebaseapp.com',
-    storageBucket: 'kalkulator-8931a.appspot.com',
-    measurementId: 'G-LDNT5B81EP',
+    apiKey: 'AIzaSyBc0cioNBzUlBHXYTce4CuiTtMbrPv44Fs',
+    appId: '1:431017052825:web:33b8a050f258b4c47b0608',
+    messagingSenderId: '431017052825',
+    projectId: 'appaaja-bd44e',
+    authDomain: 'appaaja-bd44e.firebaseapp.com',
+    storageBucket: 'appaaja-bd44e.appspot.com',
+    measurementId: 'G-WNBKSZF86E',
   );
+
 }
