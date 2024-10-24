@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Calculator extends StatefulWidget {
+  const Calculator({super.key});
+
   @override
   _CalculatorState createState() => _CalculatorState();
 }
@@ -209,7 +211,7 @@ class _CalculatorState extends State<Calculator> {
     } else if (btnText == '+/-') {
       result.startsWith('-')
           ? result = result.substring(1)
-          : result = '-' + result;
+          : result = '-$result';
       finalResult = result;
     } else {
       if (isEqualPressed) {

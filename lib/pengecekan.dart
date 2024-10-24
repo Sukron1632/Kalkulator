@@ -5,6 +5,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
 }
 
 class PengecekanPage extends StatefulWidget {
+  const PengecekanPage({super.key});
+
   @override
   _PengecekanPageState createState() => _PengecekanPageState();
 }
@@ -79,11 +83,11 @@ class _PengecekanPageState extends State<PengecekanPage> {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        minimumSize: Size(80, 80), // Ukuran tombol
+        minimumSize: const Size(80, 80), // Ukuran tombol
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8), // Sudut tombol membulat
         ),
-        padding: EdgeInsets.all(16), // Padding tombol
+        padding: const EdgeInsets.all(16), // Padding tombol
         textStyle: TextStyle(fontSize: fontSize), // Ukuran font
       ),
       child: Text(
@@ -97,11 +101,11 @@ class _PengecekanPageState extends State<PengecekanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pengecekan Ganjil Genap'),
+        title: const Text('Pengecekan Ganjil Genap'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Kembali ke halaman sebelumnya
           },
@@ -115,19 +119,19 @@ class _PengecekanPageState extends State<PengecekanPage> {
             // Hasil pengecekan ditampilkan di atas TextField
             Text(
               _result,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _controller,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none, // Menghapus border
               ),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24),
+              style: const TextStyle(fontSize: 24),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: [
                 Row(
@@ -138,7 +142,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
                     calcButton('9', Colors.brown, Colors.white),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -147,7 +151,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
                     calcButton('6', Colors.brown, Colors.white),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -156,7 +160,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
                     calcButton('3', Colors.brown, Colors.white),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -167,15 +171,15 @@ class _PengecekanPageState extends State<PengecekanPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _cekGanjilGenap,
-              child: Text('Cek Ganjil/Genap'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 60),
+                minimumSize: const Size(double.infinity, 60),
               ),
+              child: Text('Cek Ganjil/Genap'),
             ),
           ],
         ),

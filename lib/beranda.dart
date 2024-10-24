@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class BerandaPage extends StatelessWidget {
+  const BerandaPage({super.key});
+
 
   Future<void> _signOut(BuildContext context) async {
     try {
