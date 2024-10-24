@@ -18,32 +18,30 @@ class _LoginPageState extends State<LoginPage> {
     String email = usernameController.text;
     String password = passwordController.text;
 
-    try{
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Navigator.pushNamed(context, '/beranda');
-    } on FirebaseAuthException catch (e){
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      Navigator.pushNamed(context, '/layout');
+    } on FirebaseAuthException catch (e) {
       String message = 'Login Failed';
 
-      if(e.code == 'user-not-found'){
+      if (e.code == 'user-not-found') {
         message = 'User not found';
-      }
-      else if(e.code == 'wrong-password'){
+      } else if (e.code == 'wrong-password') {
         message = 'Wrong password';
       }
       SnackBar snackBar = SnackBar(
-        content: Text(
-        message, 
-        style: const TextStyle(
-            color: Colors.white
+          content: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
           ),
-        ), 
-        backgroundColor: Colors.red);
+          backgroundColor: Colors.red);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // showDialog(context: context, builder: (context) => AlertDialog(
       //   title: const Text('Login Failed'),
       //   content: Text(message),
       //   actions: [
-      //     TextButton(onPressed: () => Navigator.pop(context), 
+      //     TextButton(onPressed: () => Navigator.pop(context),
       //     child: const Text('OK'),),
       //   ],
       // ));
@@ -53,9 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white
-      ),
+      decoration: const BoxDecoration(color: Colors.white),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: _page(),
@@ -70,8 +66,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Log In", style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
-            const SizedBox(height: 30),
             icon(),
             const SizedBox(height: 50),
             inputtext("Email", usernameController),
@@ -88,12 +82,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget icon() {
-    return Container(
-      child: const Icon(Icons.calculate, color: Colors.black54, size: 120),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Image.asset(
+        'assets/images/appaaja.png',
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,
+      ),
     );
+    // return const CircleAvatar(
+    //   radius: 50,
+    //   backgroundImage: AssetImage('assets/images/appaaja.png'),
+    // );
   }
 
-  Widget inputtext(String hintText, TextEditingController controller, {bool isPassword = false}) {
+  Widget inputtext(String hintText, TextEditingController controller,
+      {bool isPassword = false}) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(18),
       borderSide: const BorderSide(color: Colors.black54),
@@ -145,7 +150,9 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget signUpBtn() {
     return TextButton(
-      onPressed: () {Navigator.pushNamed(context, '/signup');},
+      onPressed: () {
+        Navigator.pushNamed(context, '/signup');
+      },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         foregroundColor: Colors.black54,

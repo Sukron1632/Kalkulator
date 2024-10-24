@@ -1,12 +1,15 @@
+import 'package:AppaAja/Components/recSite.dart';
+import 'package:AppaAja/Components/stopwacth.dart';
+import 'package:AppaAja/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kalkulator_yak/ourteam.dart';
-import 'package:kalkulator_yak/signup.dart';
+import 'Components/ourteam.dart';
+import 'signup.dart';
 import 'firebase_options.dart';
 import 'login.dart';
-import 'beranda.dart';
-import 'kalkulator.dart';
-import 'pengecekan.dart';
+import 'Pages/beranda.dart';
+import 'Components/kalkulator.dart';
+import 'Components/pengecekan.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +30,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginPage(),
         '/signup': (context) => const SignUp(),
-        '/beranda': (context) => BerandaPage(),
         '/kalkulator': (context) => Calculator(),
         '/pengecekan': (context) => PengecekanPage(),
         '/ourteam': (context) => OurTeam(),
+        '/stopwacth': (context) => StopWatchPage(),
+        '/recsite': (context) => const RecSite(),
+        '/layout':(context) => MainPage()
       },
     );
   }

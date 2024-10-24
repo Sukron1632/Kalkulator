@@ -13,11 +13,17 @@ class OurTeam extends StatelessWidget {
         foregroundColor: Colors.black,
         elevation: 1,
         shadowColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), 
+          onPressed: () {
+            Navigator.of(context).pop(); 
+          },
+        ),
       ),
       body: const Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, 
-          crossAxisAlignment: CrossAxisAlignment.center, 
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 20),
             SizedBox(
@@ -29,12 +35,12 @@ class OurTeam extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      backgroundImage: AssetImage('assets/images/bayu.jpeg'),
+                      backgroundImage: AssetImage('assets/images/bayu.jpeg'), 
                     ),
                     SizedBox(width: 15),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start, 
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Ammar Bayu Saputra",
@@ -67,7 +73,7 @@ class OurTeam extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      backgroundImage: AssetImage('assets/images/zola.jpeg'),
+                      backgroundImage: AssetImage('assets/images/zola.jpeg'), 
                     ),
                     SizedBox(width: 15),
                     Column(

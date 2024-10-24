@@ -17,7 +17,7 @@ class _CalculatorState extends State<Calculator> {
   String preOpr = '';
   bool isOperationDone = false;
   bool isEqualPressed = false;
-  double storedResult = 0; // Menyimpan hasil operasi terakhir
+  double storedResult = 0;
 
   Widget calcButton(String btntxt, Color btncolor, Color txtcolor,
       {double fontSize = 28}) {
@@ -52,12 +52,12 @@ class _CalculatorState extends State<Calculator> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Kalkulator'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Tombol "back" yang mengarah ke halaman sebelumnya
+            Navigator.pop(context);
           },
         ),
       ),
@@ -78,7 +78,7 @@ class _CalculatorState extends State<Calculator> {
                       textAlign: TextAlign.right,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 100,
+                        fontSize: 40,
                       ),
                     ),
                   ),
@@ -144,7 +144,6 @@ class _CalculatorState extends State<Calculator> {
 
   void calculation(String btnText) {
     if (btnText == 'AC') {
-      // Reset kalkulator
       text = '0';
       numOne = 0;
       numTwo = 0;
@@ -154,7 +153,7 @@ class _CalculatorState extends State<Calculator> {
       preOpr = '';
       isOperationDone = false;
       isEqualPressed = false;
-      storedResult = 0; // Reset hasil tersimpan ketika AC ditekan
+      storedResult = 0;
     } else if (btnText == '<-') {
       if (result.isNotEmpty) {
         result = result.substring(0, result.length - 1);
@@ -182,7 +181,7 @@ class _CalculatorState extends State<Calculator> {
           finalResult = div();
         }
         numOne = double.parse(finalResult);
-        storedResult = numOne; // Simpan hasil operasi di storedResult
+        storedResult = numOne;
         result = '';
         isOperationDone = true;
       } else if (opr.isEmpty) {
@@ -194,10 +193,10 @@ class _CalculatorState extends State<Calculator> {
 
       if (btnText == '=') {
         text = finalResult;
-        isEqualPressed = true; // Tandai bahwa = telah ditekan
+        isEqualPressed = true;
       } else {
         opr = btnText;
-        isEqualPressed = false; // Reset flag saat operator baru ditekan
+        isEqualPressed = false;
         isOperationDone = false;
       }
     } else if (btnText == '%') {
@@ -215,11 +214,13 @@ class _CalculatorState extends State<Calculator> {
       finalResult = result;
     } else {
       if (isEqualPressed) {
-        // Jika "=" sudah ditekan, mulai dari hasil sebelumnya
         result = btnText;
-        isEqualPressed = false; // Reset flag setelah angka baru dimasukkan
+        isEqualPressed = false;
       } else {
-        result += btnText;
+        // Batasi panjang input menjadi 15 digit
+        if (result.length < 15) {
+          result += btnText;
+        }
       }
       finalResult = result;
     }

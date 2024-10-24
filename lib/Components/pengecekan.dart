@@ -5,8 +5,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,8 +18,6 @@ class MyApp extends StatelessWidget {
 }
 
 class PengecekanPage extends StatefulWidget {
-  const PengecekanPage({super.key});
-
   @override
   _PengecekanPageState createState() => _PengecekanPageState();
 }
@@ -50,9 +46,12 @@ class _PengecekanPageState extends State<PengecekanPage> {
   }
 
   void _addNumber(String number) {
-    setState(() {
-      _controller.text += number;
-    });
+    // Batasi panjang input menjadi 15 digit
+    if (_controller.text.length < 15) {
+      setState(() {
+        _controller.text += number;
+      });
+    }
   }
 
   void _clear() {
@@ -83,12 +82,12 @@ class _PengecekanPageState extends State<PengecekanPage> {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        minimumSize: const Size(80, 80), // Ukuran tombol
+        minimumSize: Size(80, 80),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8), // Sudut tombol membulat
+          borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.all(16), // Padding tombol
-        textStyle: TextStyle(fontSize: fontSize), // Ukuran font
+        padding: EdgeInsets.all(16),
+        textStyle: TextStyle(fontSize: fontSize),
       ),
       child: Text(
         text,
@@ -101,13 +100,13 @@ class _PengecekanPageState extends State<PengecekanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pengecekan Ganjil Genap'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        title: Text('Pengecekan Ganjil Genap'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke halaman sebelumnya
+            Navigator.pop(context);
           },
         ),
       ),
@@ -116,22 +115,21 @@ class _PengecekanPageState extends State<PengecekanPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Hasil pengecekan ditampilkan di atas TextField
             Text(
               _result,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             TextField(
               controller: _controller,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: InputBorder.none, // Menghapus border
+              decoration: InputDecoration(
+                border: InputBorder.none,
               ),
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 24),
+              style: TextStyle(fontSize: 24),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Column(
               children: [
                 Row(
@@ -142,7 +140,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
                     calcButton('9', Colors.brown, Colors.white),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -151,7 +149,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
                     calcButton('6', Colors.brown, Colors.white),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -160,7 +158,7 @@ class _PengecekanPageState extends State<PengecekanPage> {
                     calcButton('3', Colors.brown, Colors.white),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -171,15 +169,15 @@ class _PengecekanPageState extends State<PengecekanPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _cekGanjilGenap,
+              child: Text('Cek Ganjil/Genap'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 60),
+                minimumSize: Size(double.infinity, 60),
               ),
-              child: Text('Cek Ganjil/Genap'),
             ),
           ],
         ),
