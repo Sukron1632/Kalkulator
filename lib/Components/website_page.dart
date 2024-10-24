@@ -336,14 +336,14 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    post.link,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  // const SizedBox(height: 5),
+                  // Text(
+                  //   post.link,
+                  //   style: const TextStyle(
+                  //     fontSize: 10,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
                 ],
               ),
               const Spacer(),
