@@ -16,9 +16,26 @@ class _LoginPageState extends State<LoginPage> {
     String email = usernameController.text;
     String password = passwordController.text;
 
+    final loadingDialog = showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Logging In"),
+            ],
+          ),
+        );
+      },
+    );
+
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+      Navigator.of(context).pop();
       Navigator.pushNamed(context, '/layout');
     } on FirebaseAuthException catch (e) {
       String message = 'Login Failed';
@@ -28,9 +45,12 @@ class _LoginPageState extends State<LoginPage> {
       } else if (e.code == 'wrong-password') {
         message = 'Wrong password';
       }
+
+      Navigator.of(context).pop();
+
       SnackBar snackBar = SnackBar(
           content: Text(
-            message,
+            message + ' : ' + e.code,
             style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.red);
@@ -43,7 +63,10 @@ class _LoginPageState extends State<LoginPage> {
       //     child: const Text('OK'),),
       //   ],
       // ));
-    }
+    } 
+    // finally {
+    //   Navigator.of(context).pop();
+    // }
   }
 
   @override

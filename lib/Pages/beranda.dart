@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BerandaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? userEmail = FirebaseAuth.instance.currentUser?.email;
+    String username = userEmail != null ? userEmail.split('@')[0] : 'unknown user';
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -15,9 +18,9 @@ class BerandaPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Selamat datang di AppaAja',
-              style: TextStyle(fontSize: 24),
+            Text(
+              'Selamat datang di AppaAja, $username',
+              style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
             SizedBox(

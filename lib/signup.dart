@@ -17,14 +17,31 @@ class _SignUpState extends State<SignUp> {
     String email = usernameController.text;
     String password = passwordController.text;
 
+    final loadingDialog = showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Signing Up"),
+            ],
+          ),
+        );
+      },
+    );
+
     try{
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      Navigator.of(context).pop();
       Navigator.pushNamed(context, '/layout');
     } on FirebaseAuthException catch (e){
       String message = 'Sign up Failed';
 
       if (e.code == 'weak-password'){
-        message = 'Haiya! Password so weak laaa!';
+        message = 'Weak Password, 8 Characters minimum';
       }
       else if(e.code == 'email-already-in-use'){
         message = 'Email already in use';
@@ -33,14 +50,23 @@ class _SignUpState extends State<SignUp> {
         message = 'Email invalid';
       }
 
-      showDialog(context: context, builder: (context) => AlertDialog(
-        title: const Text('Sign up Failed'),
-        content: Text(message),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), 
-          child: const Text('OK'),),
-        ],
-      ));
+      Navigator.of(context).pop();
+
+      SnackBar snackBar = SnackBar(
+          content: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // showDialog(context: context, builder: (context) => AlertDialog(
+      //   title: const Text('Sign up Failed'),
+      //   content: Text(message),
+      //   actions: [
+      //     TextButton(onPressed: () => Navigator.pop(context), 
+      //     child: const Text('OK'),),
+      //   ],
+      // ));
     }
   }
 
