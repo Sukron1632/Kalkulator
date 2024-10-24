@@ -18,9 +18,14 @@ class BerandaPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            const Text(
+              'Selamat datang di AppaAja,',
+              style: TextStyle(fontSize: 24),
+            ),
+            // const SizedBox(height: 1),
             Text(
-              'Selamat datang di AppaAja, $username',
-              style: const TextStyle(fontSize: 24),
+              username ,
+              style: const TextStyle(fontSize: 24, color: Color.fromARGB(255, 19, 80, 21)),
             ),
             const SizedBox(height: 20),
             SizedBox(

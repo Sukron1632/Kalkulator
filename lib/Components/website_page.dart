@@ -200,12 +200,12 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _openAddWebsiteDialog,
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.add),
+        //     onPressed: _openAddWebsiteDialog,
+        //   ),
+        // ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.black,
@@ -227,6 +227,13 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
           _tabAll(),
           _tabWebFavorit(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddWebsiteDialog,
+        tooltip: 'Add Website',
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
     );
   }
