@@ -8,7 +8,7 @@ class HelpPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, '/login');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal Logout : $e')),
+        SnackBar(content: Text('Gagal Logout: $e')),
       );
     }
   }
@@ -24,37 +24,63 @@ class HelpPage extends StatelessWidget {
         elevation: 1,
         shadowColor: Colors.black,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: <Widget>[
             const Text(
-              'Petunjuk Penggunaan : ',
-              style: TextStyle(fontSize: 24),
-            ),
-            const Text(
-              '1. Tinggal Tap-Tap aja',
-              style: TextStyle(fontSize: 15),
+              'Panduan Menggunakan Stopwatch:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  _signOut(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            const Text(
+              '1. Waktu ditampilkan dalam format jam, menit, detik, dan milidetik.',
+              style: TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '2. Tekan tombol "Start Timer" untuk memulai penghitungan waktu.',
+              style: TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '3. Tekan tombol "Pause" untuk menghentikan sementara penghitungan waktu.',
+              style: TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '4. Tekan tombol "Continue" untuk melanjutkan penghitungan waktu.',
+              style: TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              '5. Tekan tombol "Reset" untuk mengatur ulang waktu ke kondisi awal.',
+              style: TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 40),
+            Center(
+              child: SizedBox(
+                width: 200,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _signOut(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: const Text(
+                    'Log Out',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
                 ),
-                child: const Text('Log Out', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
               ),
             ),
           ],
