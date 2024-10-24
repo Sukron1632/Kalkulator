@@ -1,4 +1,5 @@
 import 'package:AppaAja/Services/sites_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
@@ -62,11 +63,15 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
         Navigator.of(context).pop();
       }
 
+      String? userEmail = FirebaseAuth.instance.currentUser?.email;
+      String username = userEmail != null ? userEmail.split('@')[0] : 'unknown user';
+
       await _firestoreService.addPost(
         _titleController.text,
         _linkController.text,
         false,
         imageUrl,
+        username
       );
 
       _titleController.clear();
@@ -287,6 +292,7 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
   }
 
   Widget _websiteList(Post post) {
+    String uploader = post.uploader;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ElevatedButton(
@@ -344,6 +350,14 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                   //     color: Colors.grey,
                   //   ),
                   // ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Uploaded by $uploader',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
               ),
               const Spacer(),
