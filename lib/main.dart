@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/kalkulator': (context) => Calculator(),
         '/pengecekan': (context) => PengecekanPage(),
         '/ourteam': (context) => OurTeam(),
-        '/stopwacth': (context) => StopWatchPage(),
+        '/stopwatch': (context) => StopWatchPage(),
         '/recsite': (context) => const RecSite(),
         '/layout':(context) => MainPage(),
         '/website':(context) => websitePage(),

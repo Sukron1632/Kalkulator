@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MathPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,48 +12,47 @@ class MathPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/kalkulator');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0), 
+                  child: IconButton(
+                    iconSize: 70,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/kalkulator');
+                    },
+                    icon: const Icon(Icons.calculate),
+                    color: Colors.black,
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
-                child: const Text('Kalkulator'),
-              ),
+                const Text(
+                  'Kalkulator',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/pengecekan');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            const SizedBox(height: 20), 
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0), 
+                  child: IconButton(
+                    iconSize: 70,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/pengecekan');
+                    },
+                    icon: const Icon(Icons.free_cancellation),
+                    color: Colors.black,
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 ),
-                child: const Text('Pengecekan Ganjil Genap',
-                    textAlign: TextAlign.center),
-              ),
+                const Text(
+                  'Pengecekan Ganjil Genap',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
             ),
           ],
         ),

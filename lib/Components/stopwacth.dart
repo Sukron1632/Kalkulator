@@ -7,23 +7,39 @@ class StopWatchPage extends StatefulWidget {
 }
 
 class _StopWatchPageState extends State<StopWatchPage> {
+  int initialHours = 0;
+  int initialMinutes = 0;
+  int initialSeconds = 0;
+
   Duration duration = const Duration();
   Timer? timer;
   bool isRunning = false;
   bool isPaused = false;
+  List<String> markers = [];
 
   void reset() {
     setState(() {
-      duration = const Duration();
+      duration = Duration(
+        hours: initialHours,
+        minutes: initialMinutes,
+        seconds: initialSeconds,
+      );
       isRunning = false;
       isPaused = false;
+      markers.clear();
     });
     timer?.cancel();
   }
 
   void addTime() {
     setState(() {
-      duration = Duration(milliseconds: duration.inMilliseconds + 10);
+      if (duration.inHours >= 24) {
+        timer?.cancel();
+        isRunning = false;
+        isPaused = true;
+      } else {
+        duration = Duration(milliseconds: duration.inMilliseconds + 10);
+      }
     });
   }
 
@@ -51,6 +67,23 @@ class _StopWatchPageState extends State<StopWatchPage> {
     });
   }
 
+  void markTime() {
+    String timeMarker = formatDuration(duration);
+    setState(() {
+      markers.add(timeMarker);
+    });
+  }
+
+  String formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(d.inHours);
+    final minutes = twoDigits(d.inMinutes.remainder(60));
+    final seconds = twoDigits(d.inSeconds.remainder(60));
+    final milliseconds = (d.inMilliseconds % 1000) ~/ 10;
+    String formattedMilliseconds = (milliseconds < 10) ? '0$milliseconds' : '$milliseconds'; 
+    return '$hours:$minutes:$seconds:$formattedMilliseconds';
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -68,6 +101,8 @@ class _StopWatchPageState extends State<StopWatchPage> {
             Center(child: buildTime()),
             const SizedBox(height: 24),
             buildButtons(),
+            const SizedBox(height: 24),
+            buildMarkers(),
           ],
         ),
       );
@@ -77,7 +112,7 @@ class _StopWatchPageState extends State<StopWatchPage> {
     final hours = twoDigits(duration.inHours);
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
-    final milliseconds = (duration.inMilliseconds % 1000) ~/ 10;
+    final milliseconds = twoDigits((duration.inMilliseconds % 1000) ~/ 10);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -94,7 +129,7 @@ class _StopWatchPageState extends State<StopWatchPage> {
         const SizedBox(width: 8),
         const Text(':', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         const SizedBox(width: 8),
-        buildTimeCard(time: twoDigits(milliseconds), header: 'MILI DETIK'),
+        buildTimeCard(time: milliseconds, header: 'MILI DETIK'),
       ],
     );
   }
@@ -110,11 +145,11 @@ class _StopWatchPageState extends State<StopWatchPage> {
             ),
             child: Text(
               time,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 48), 
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 48),
             ),
           ),
           const SizedBox(height: 4),
-          Text(header, style: const TextStyle(fontSize: 16)), 
+          Text(header, style: const TextStyle(fontSize: 16)),
         ],
       );
 
@@ -132,6 +167,12 @@ class _StopWatchPageState extends State<StopWatchPage> {
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               textStyle: const TextStyle(fontSize: 20),
             ),
+          ),
+          const SizedBox(width: 12),
+          IconButton(
+            icon: const Icon(Icons.flag_circle_rounded, size: 80, color: Colors.blue),
+            onPressed: markTime,
+            tooltip: 'Mark Time',
           ),
           const SizedBox(width: 12),
           ElevatedButton(
@@ -154,6 +195,12 @@ class _StopWatchPageState extends State<StopWatchPage> {
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               textStyle: const TextStyle(fontSize: 20),
             ),
+          ),
+          const SizedBox(width: 12),
+          IconButton(
+            icon: const Icon(Icons.flag_circle_rounded, size: 80, color: Colors.blue),
+            onPressed: markTime,
+            tooltip: 'Mark Time',
           ),
           const SizedBox(width: 12),
           ElevatedButton(
@@ -179,6 +226,26 @@ class _StopWatchPageState extends State<StopWatchPage> {
           ),
         ],
       ],
+    );
+  }
+
+  Widget buildMarkers() {
+    if (markers.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: markers.asMap().entries.map((entry) {
+        int index = entry.key;
+        String marker = entry.value;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            '${index + 1}. $marker',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        );
+      }).toList(),
     );
   }
 

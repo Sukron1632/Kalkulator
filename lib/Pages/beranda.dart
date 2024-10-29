@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class BerandaPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     String? userEmail = FirebaseAuth.instance.currentUser?.email;
     String username = userEmail != null ? userEmail.split('@')[0] : 'unknown user';
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -16,89 +16,60 @@ class BerandaPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
               'Selamat datang di AppaAja, $username',
               style: const TextStyle(fontSize: 24),
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/ourteam'); 
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    IconButton(
+                      iconSize: 60,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/ourteam');
+                      },
+                      icon: const Icon(Icons.group),
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text('Our Team', style: TextStyle(fontSize: 16)),
+                  ],
                 ),
-                child: const Text('Our Team', textAlign: TextAlign.center),
-              ),
+                const SizedBox(width: 60),
+                Column(
+                  children: [
+                    IconButton(
+                      iconSize: 60,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/stopwatch');
+                      },
+                      icon: const Icon(Icons.timer),
+                      color: Colors.black,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text('Stopwatch', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/stopwacth'); 
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            const SizedBox(height: 30),
+            Column(
+              children: [
+                IconButton(
+                  iconSize: 60,
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/website');
+                  },
+                  icon: const Icon(Icons.app_shortcut_rounded),
+                  color: Colors.black,
                 ),
-                child: const Text('stopwacth'),
-              ),
-            ),
-            // const SizedBox(height: 20),
-            // SizedBox(
-            //   width: 200,
-            //   height: 60,
-            //   child: ElevatedButton(
-            //     onPressed: () {
-            //       Navigator.pushNamed(context, '/testing');
-            //     },
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: Colors.black,
-            //       foregroundColor: Colors.white,
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(30),
-            //       ),
-            //       padding:
-            //           const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            //     ),
-            //     child: const Text('testing Page'),
-            //   ),
-            // ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/website');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                ),
-                child: const Text('Recommended Sites'),
-              ),
+                const SizedBox(height: 8),
+                const Text('Recommended Sites', style: TextStyle(fontSize: 16)),
+              ],
             ),
           ],
         ),
