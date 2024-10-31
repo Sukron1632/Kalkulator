@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
@@ -7,6 +8,10 @@ class HelpPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', false);
+
       Navigator.pushReplacementNamed(context, '/login');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

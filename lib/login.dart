@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -35,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('email', email);
+
       Navigator.of(context).pop();
       Navigator.pushNamed(context, '/layout');
     } on FirebaseAuthException catch (e) {
