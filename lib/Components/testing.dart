@@ -1,5 +1,7 @@
 import 'package:AppaAja/Services/service_testing.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
@@ -15,11 +17,15 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _linkController = TextEditingController();
   File? _imageFile;
+  String? userId;
+
+  Map<String, bool> favoriteStatus = {};
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    userId = FirebaseAuth.instance.currentUser?.uid;
   }
 
   @override
@@ -28,12 +34,18 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
     super.dispose();
   }
 
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $urlString');
+    }
+  }
+
   Future<void> _addPost() async {
     if (_titleController.text.isNotEmpty && _linkController.text.isNotEmpty) {
       String? imageUrl;
 
       if (_imageFile != null) {
-
         final loadingDialog = showDialog(
           context: context,
           barrierDismissible: false,
@@ -54,11 +66,14 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
         Navigator.of(context).pop();
       }
 
+      String? userEmail = FirebaseAuth.instance.currentUser?.email;
+      String username = userEmail != null ? userEmail.split('@')[0] : 'unknown user';
+
       await _firestoreService.addPost(
         _titleController.text,
         _linkController.text,
-        false,
         imageUrl,
+        username,
       );
 
       _titleController.clear();
@@ -82,7 +97,17 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
     }
   }
 
-  // Function to open the "Add Website" dialog
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   void _openAddWebsiteDialog() {
     showDialog(
       context: context,
@@ -106,10 +131,10 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                 style: ElevatedButton.styleFrom(
                   elevation: 1,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7)
+                    borderRadius: BorderRadius.circular(7),
                   ),
                   backgroundColor: Colors.black,
-                  foregroundColor: Colors.white
+                  foregroundColor: Colors.white,
                 ),
                 child: const Text('Upload Image'),
               ),
@@ -133,7 +158,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                     Navigator.of(context).pop();
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.black
+                    foregroundColor: Colors.black,
                   ),
                   child: const Text('Cancel'),
                 ),
@@ -142,10 +167,10 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                   style: ElevatedButton.styleFrom(
                     elevation: 1,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)
+                      borderRadius: BorderRadius.circular(7),
                     ),
                     backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text('Add Website'),
                 ),
@@ -157,21 +182,32 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
     );
   }
 
-  // Function to pick an image from the gallery
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
+  Future<void> _fetchFavoriteStatus(String postId) async {
+    try {
+      bool isFavorited = await _firestoreService.isSiteFavorited(userId, postId);
       setState(() {
-        _imageFile = File(pickedFile.path);
+        favoriteStatus[postId] = isFavorited; // Store the status in the map
       });
+    } catch (e) {
+      // Handle the exception (e.g., log it or show a message)
+      print("Error fetching favorite status: $e");
     }
   }
 
-  // Function to toggle favorite status
+
   Future<void> _toggleFavorite(Post post) async {
-    await _firestoreService.updatePost(post.id, !post.fav);
+    bool isFavorited = await _firestoreService.isSiteFavorited(userId, post.id);
+    
+    if (isFavorited) {
+      // If the site is already favorited, remove it
+      await _firestoreService.updateUserFav(userId, post.id); // This will remove it
+    } else {
+      // If not, add it to favorites
+      await _firestoreService.updateUserFav(userId, post.id);
+    }
+
+    // Refresh the favorite status after toggling
+    _fetchFavoriteStatus(post.id);
   }
 
   @override
@@ -190,40 +226,38 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _openAddWebsiteDialog, // Open the popup when pressed
-          ),
-        ],
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: Colors.black,
+          labelColor: const Color.fromARGB(255, 134, 43, 15),
+          unselectedLabelColor: Colors.grey,
           tabs: const [
-            Tab(text: 'All Websites'),
-            Tab(text: 'Favorites'),
+            Tab(icon: Icon(Icons.language)),
+            Tab(icon: Icon(Icons.favorite)),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          // First tab: Displaying all websites
-          _buildAllWebsitesTab(),
-          // Second tab: Displaying favorite websites
-          _buildFavoriteWebsitesTab(),
+          _tabAll(),
+          _tabWebFavorit(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddWebsiteDialog,
+        tooltip: 'Add Website',
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  Widget _buildAllWebsitesTab() {
+  Widget _tabAll() {
     return StreamBuilder<List<Post>>(
       stream: _firestoreService.getPosts(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         if (snapshot.hasError) {
           return const Center(child: Text('Error fetching websites'));
         }
@@ -232,53 +266,71 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
           return const Center(child: Text('No websites found'));
         }
 
-        // List of all posts
         final posts = snapshot.data!;
+        
+        // Fetch favorite status for each post
+        for (var post in posts) {
+          _fetchFavoriteStatus(post.id); // Fetch favorite status for each post
+        }
+
         return ListView.builder(
           itemCount: posts.length,
           itemBuilder: (context, index) {
             final post = posts[index];
-            return _buildPostCard(post);
+            return _websiteList(post);
           },
         );
       },
     );
   }
 
-  Widget _buildFavoriteWebsitesTab() {
-    return StreamBuilder<List<Post>>(
-      stream: _firestoreService.getPosts(),
+
+  Widget _tabWebFavorit() {
+    return StreamBuilder<UserFav?>(
+      stream: _firestoreService.getUserFav(userId!),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching websites'));
+          return const Center(child: Text('Error fetching user favorites'));
         }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.favoritSites.isEmpty) {
           return const Center(child: Text('No favorite websites found'));
         }
 
-        // List of favorite posts
-        final posts = snapshot.data!.where((post) => post.fav).toList();
-        if (posts.isEmpty) {
-          return const Center(child: Text('No favorite websites found'));
-        }
+        final favoritSites = snapshot.data!.favoritSites;
+        return StreamBuilder<List<Post>>(
+          stream: _firestoreService.getFavoritePosts(favoritSites), // Ambil situs favorit berdasarkan favoritSites
+          builder: (context, snapshot) {
 
-        return ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            final post = posts[index];
-            return _buildPostCard(post);
+            if (snapshot.hasError) {
+              return const Center(child: Text('Error fetching favorite websites'));
+            }
+
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No favorite websites found'));
+            }
+
+            final posts = snapshot.data!;
+            return ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                return _websiteList(post);
+              },
+            );
           },
         );
       },
     );
   }
 
-  Widget _buildPostCard(Post post) {
+  Widget _websiteList(Post post) {
+    String uploader = post.uploader;
+
+    // Default to false if the favorite status hasn't been fetched yet
+    bool isFavorited = favoriteStatus[post.id] ?? false;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ElevatedButton(
@@ -291,7 +343,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
           elevation: 1,
         ),
         onPressed: () {
-          // _launchUrl(post.link);
+          _launchUrl(post.link);
         },
         child: SizedBox(
           width: double.infinity,
@@ -330,7 +382,7 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    post.link,
+                    'Uploaded by $uploader',
                     style: const TextStyle(
                       fontSize: 10,
                       color: Colors.grey,
@@ -341,13 +393,21 @@ class _TestingPageState extends State<TestingPage> with SingleTickerProviderStat
               const Spacer(),
               IconButton(
                 icon: Icon(
-                  post.fav ? Icons.favorite : Icons.favorite_border,
-                  color: post.fav ? Colors.red : null,
+                  isFavorited ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorited ? Colors.red : Colors.black,
                 ),
                 onPressed: () {
-                  _toggleFavorite(post);
+                  _toggleFavorite(post); // Toggles the favorite status
                 },
               ),
+              // const Spacer(),
+              // IconButton(
+              //   icon: Icon(Icons.delete),
+              //   onPressed: () async {
+              //     await _firestoreService.deletePost(post.id);
+              //     // Refresh UI or show a deletion confirmation
+              //   },
+              // ),
             ],
           ),
         ),

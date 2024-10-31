@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         '/stopwatch': (context) => StopWatchPage(),
         '/recsite': (context) => const RecSite(),
         '/layout':(context) => MainPage(),
-        '/website':(context) => websitePage(),
+        '/website':(context) => WebsitePage(),
         '/testing':(context) => TestingPage(),
       },
     );

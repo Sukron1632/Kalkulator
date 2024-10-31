@@ -6,29 +6,26 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
-class websitePage extends StatefulWidget {
+class WebsitePage extends StatefulWidget {
   @override
-  _websitePageState createState() => _websitePageState();
+  _WebsitePageState createState() => _WebsitePageState();
 }
 
-class _websitePageState extends State<websitePage> with SingleTickerProviderStateMixin {
+class _WebsitePageState extends State<WebsitePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final FirestoreService _firestoreService = FirestoreService();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _linkController = TextEditingController();
   File? _imageFile;
+  String? userId;
 
-  Future<void> _launchUrl(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $urlString');
-    }
-  }
+  Map<String, bool> favoriteStatus = {};
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    userId = FirebaseAuth.instance.currentUser?.uid;
   }
 
   @override
@@ -37,12 +34,18 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
     super.dispose();
   }
 
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $urlString');
+    }
+  }
+
   Future<void> _addPost() async {
     if (_titleController.text.isNotEmpty && _linkController.text.isNotEmpty) {
       String? imageUrl;
 
       if (_imageFile != null) {
-
         final loadingDialog = showDialog(
           context: context,
           barrierDismissible: false,
@@ -69,9 +72,8 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
       await _firestoreService.addPost(
         _titleController.text,
         _linkController.text,
-        false,
         imageUrl,
-        username
+        username,
       );
 
       _titleController.clear();
@@ -129,10 +131,10 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                 style: ElevatedButton.styleFrom(
                   elevation: 1,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7)
+                    borderRadius: BorderRadius.circular(7),
                   ),
                   backgroundColor: Colors.black,
-                  foregroundColor: Colors.white
+                  foregroundColor: Colors.white,
                 ),
                 child: const Text('Upload Image'),
               ),
@@ -156,7 +158,7 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                     Navigator.of(context).pop();
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.black
+                    foregroundColor: Colors.black,
                   ),
                   child: const Text('Cancel'),
                 ),
@@ -165,10 +167,10 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                   style: ElevatedButton.styleFrom(
                     elevation: 1,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)
+                      borderRadius: BorderRadius.circular(7),
                     ),
                     backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text('Add Website'),
                 ),
@@ -180,8 +182,32 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
     );
   }
 
+  Future<void> _fetchFavoriteStatus(String postId) async {
+    try {
+      bool isFavorited = await _firestoreService.isSiteFavorited(userId, postId);
+      setState(() {
+        favoriteStatus[postId] = isFavorited; // Store the status in the map
+      });
+    } catch (e) {
+      // Handle the exception (e.g., log it or show a message)
+      print("Error fetching favorite status: $e");
+    }
+  }
+
+
   Future<void> _toggleFavorite(Post post) async {
-    await _firestoreService.updatePost(post.id, !post.fav);
+    bool isFavorited = await _firestoreService.isSiteFavorited(userId, post.id);
+    
+    if (isFavorited) {
+      // If the site is already favorited, remove it
+      await _firestoreService.updateUserFav(userId, post.id); // This will remove it
+    } else {
+      // If not, add it to favorites
+      await _firestoreService.updateUserFav(userId, post.id);
+    }
+
+    // Refresh the favorite status after toggling
+    _fetchFavoriteStatus(post.id);
   }
 
   @override
@@ -200,24 +226,14 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
             Navigator.of(context).pop();
           },
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.add),
-        //     onPressed: _openAddWebsiteDialog,
-        //   ),
-        // ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.black,
           labelColor: const Color.fromARGB(255, 134, 43, 15),
           unselectedLabelColor: Colors.grey,
           tabs: const [
-            Tab(
-              icon: Icon(Icons.language),
-            ),
-            Tab(
-              icon: Icon(Icons.favorite),
-            ),
+            Tab(icon: Icon(Icons.language)),
+            Tab(icon: Icon(Icons.favorite)),
           ],
         ),
       ),
@@ -242,10 +258,6 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
     return StreamBuilder<List<Post>>(
       stream: _firestoreService.getPosts(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         if (snapshot.hasError) {
           return const Center(child: Text('Error fetching websites'));
         }
@@ -255,6 +267,12 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
         }
 
         final posts = snapshot.data!;
+        
+        // Fetch favorite status for each post
+        for (var post in posts) {
+          _fetchFavoriteStatus(post.id); // Fetch favorite status for each post
+        }
+
         return ListView.builder(
           itemCount: posts.length,
           itemBuilder: (context, index) {
@@ -266,32 +284,41 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
     );
   }
 
+
   Widget _tabWebFavorit() {
-    return StreamBuilder<List<Post>>(
-      stream: _firestoreService.getPosts(),
+    return StreamBuilder<UserFav?>(
+      stream: _firestoreService.getUserFav(userId!),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching websites'));
+          return const Center(child: Text('Error fetching user favorites'));
         }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.favoritSites.isEmpty) {
           return const Center(child: Text('No favorite websites found'));
         }
 
-        final posts = snapshot.data!.where((post) => post.fav).toList();
-        if (posts.isEmpty) {
-          return const Center(child: Text('No favorite websites found'));
-        }
+        final favoritSites = snapshot.data!.favoritSites;
+        return StreamBuilder<List<Post>>(
+          stream: _firestoreService.getFavoritePosts(favoritSites), // Ambil situs favorit berdasarkan favoritSites
+          builder: (context, snapshot) {
 
-        return ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            final post = posts[index];
-            return _websiteList(post);
+            if (snapshot.hasError) {
+              return const Center(child: Text('Error fetching favorite websites'));
+            }
+
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No favorite websites found'));
+            }
+
+            final posts = snapshot.data!;
+            return ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                return _websiteList(post);
+              },
+            );
           },
         );
       },
@@ -300,6 +327,10 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
 
   Widget _websiteList(Post post) {
     String uploader = post.uploader;
+
+    // Default to false if the favorite status hasn't been fetched yet
+    bool isFavorited = favoriteStatus[post.id] ?? false;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ElevatedButton(
@@ -349,14 +380,6 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
                       color: Colors.black,
                     ),
                   ),
-                  // const SizedBox(height: 5),
-                  // Text(
-                  //   post.link,
-                  //   style: const TextStyle(
-                  //     fontSize: 10,
-                  //     color: Colors.grey,
-                  //   ),
-                  // ),
                   const SizedBox(height: 5),
                   Text(
                     'Uploaded by $uploader',
@@ -370,13 +393,21 @@ class _websitePageState extends State<websitePage> with SingleTickerProviderStat
               const Spacer(),
               IconButton(
                 icon: Icon(
-                  post.fav ? Icons.favorite : Icons.favorite_border,
-                  color: post.fav ? Colors.red : Colors.black,
+                  isFavorited ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorited ? Colors.red : Colors.black,
                 ),
                 onPressed: () {
-                  _toggleFavorite(post);
+                  _toggleFavorite(post); // Toggles the favorite status
                 },
               ),
+              // const Spacer(),
+              // IconButton(
+              //   icon: Icon(Icons.delete),
+              //   onPressed: () async {
+              //     await _firestoreService.deletePost(post.id);
+              //     // Refresh UI or show a deletion confirmation
+              //   },
+              // ),
             ],
           ),
         ),

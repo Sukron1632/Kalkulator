@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../Services/service_testing.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -12,6 +13,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirestoreService _firestoreService = FirestoreService();
 
   Future<void> _signup() async {
     String email = usernameController.text;
@@ -33,40 +35,34 @@ class _SignUpState extends State<SignUp> {
       },
     );
 
-    try{
+    try {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      // Panggil addUser setelah pendaftaran berhasil
+      await _firestoreService.addUser(userCredential.user!.uid,); // Gantilah email dengan data yang ingin Anda simpan
+
       Navigator.of(context).pop();
       Navigator.pushNamed(context, '/layout');
-    } on FirebaseAuthException catch (e){
+    } on FirebaseAuthException catch (e) {
       String message = 'Sign up Failed';
 
-      if (e.code == 'weak-password'){
+      if (e.code == 'weak-password') {
         message = 'Weak Password, 8 Characters minimum';
-      }
-      else if(e.code == 'email-already-in-use'){
+      } else if (e.code == 'email-already-in-use') {
         message = 'Email already in use';
-      }
-      else if(e.code == 'invalid-email'){
+      } else if (e.code == 'invalid-email') {
         message = 'Email invalid';
       }
 
       Navigator.of(context).pop();
 
       SnackBar snackBar = SnackBar(
-          content: Text(
-            message,
-            style: const TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.red);
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      // showDialog(context: context, builder: (context) => AlertDialog(
-      //   title: const Text('Sign up Failed'),
-      //   content: Text(message),
-      //   actions: [
-      //     TextButton(onPressed: () => Navigator.pop(context), 
-      //     child: const Text('OK'),),
-      //   ],
-      // ));
     }
   }
 
@@ -74,7 +70,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white
+        color: Colors.white,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -90,7 +86,10 @@ class _SignUpState extends State<SignUp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Sign Up", style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
+            const Text(
+              "Sign Up",
+              style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 30),
             _icon(),
             const SizedBox(height: 50),
@@ -142,15 +141,6 @@ class _SignUpState extends State<SignUp> {
     return ElevatedButton(
       onPressed: () {
         _signup();
-        // // Verifikasi username dan password yang hardcode
-        // if (usernameController.text == "admin" && passwordController.text == "123") {
-        //   Navigator.pushNamed(context, '/beranda'); // Navigasi ke halaman kalkulator
-        // } else {
-        //   // Jika login gagal, tampilkan pesan kesalahan
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text("Login gagal! Username atau password salah.")),
-        //   );
-        // }
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
@@ -171,7 +161,9 @@ class _SignUpState extends State<SignUp> {
 
   Widget login() {
     return TextButton(
-      onPressed: () {Navigator.pushNamed(context, '/login');},
+      onPressed: () {
+        Navigator.pushNamed(context, '/login');
+      },
       child: const Text(
         "Already have account?",
         textAlign: TextAlign.center,
