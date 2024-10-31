@@ -16,6 +16,7 @@ class _StopWatchPageState extends State<StopWatchPage> {
   bool isRunning = false;
   bool isPaused = false;
   List<String> markers = [];
+  ScrollController _scrollController = ScrollController();
 
   void reset() {
     setState(() {
@@ -71,6 +72,11 @@ class _StopWatchPageState extends State<StopWatchPage> {
     String timeMarker = formatDuration(duration);
     setState(() {
       markers.add(timeMarker);
+    });
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
     });
   }
 
@@ -233,25 +239,32 @@ class _StopWatchPageState extends State<StopWatchPage> {
     if (markers.isEmpty) {
       return const SizedBox.shrink();
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: markers.asMap().entries.map((entry) {
-        int index = entry.key;
-        String marker = entry.value;
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Text(
-            '${index + 1}. $marker',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        );
-      }).toList(),
+    return Container(
+      height: 200,
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: markers.asMap().entries.map((entry) {
+            int index = entry.key;
+            String marker = entry.value;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                '${index + 1}. $marker',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 
   @override
   void dispose() {
     timer?.cancel();
+    _scrollController.dispose();
     super.dispose();
   }
 }
